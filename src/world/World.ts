@@ -16,7 +16,8 @@ export class World {
     lane: number;
     speed: number;
   }[] = [];
-  readonly cityHalf = 540;
+  // A dense, bounded 840 m × 840 m city keeps the world readable and performant.
+  readonly cityHalf = 420;
 
   constructor(spec: TrackSpec, barriers: boolean) {
     this.track = new Track(spec);
@@ -221,10 +222,11 @@ export class World {
     const lane = mat(0xd6cda8);
     const sidewalk = mat(0x89928e);
     const citySize = this.cityHalf * 2 + 80;
+    const cityGrid = 105;
     const roadWidth = 15;
     const roadDashesX: THREE.Matrix4[] = [],
       roadDashesZ: THREE.Matrix4[] = [];
-    for (let line = -this.cityHalf; line <= this.cityHalf; line += 90) {
+    for (let line = -this.cityHalf; line <= this.cityHalf; line += cityGrid) {
       const horizontal = new THREE.Mesh(new THREE.BoxGeometry(citySize, 0.04, roadWidth), road);
       horizontal.position.set(0, 0.005, line);
       horizontal.receiveShadow = true;
@@ -259,8 +261,8 @@ export class World {
     const buildingColors = [0x647878, 0x7f7269, 0x536b73, 0xa18b74, 0x465c5f, 0x8c8b7a];
     const buildingTransforms = buildingColors.map(() => [] as THREE.Matrix4[]);
     const roofTransforms: THREE.Matrix4[] = [];
-    for (let x = -this.cityHalf + 18; x < this.cityHalf - 18; x += 90) {
-      for (let z = -this.cityHalf + 18; z < this.cityHalf - 18; z += 90) {
+    for (let x = -this.cityHalf + 18; x < this.cityHalf - 18; x += cityGrid) {
+      for (let z = -this.cityHalf + 18; z < this.cityHalf - 18; z += cityGrid) {
         // Leave a broad mixed-use central boulevard and the race route readable.
         const blockDistance = Math.hypot(x, z);
         if (blockDistance < 105 && spec.id === 'coast') continue;
@@ -355,7 +357,7 @@ export class World {
     for (let i = 0; i < 28; i++) {
       const axis: 'x' | 'z' = i % 2 === 0 ? 'x' : 'z';
       const direction: 1 | -1 = random() > 0.5 ? 1 : -1;
-      const road = -this.cityHalf + 45 + Math.floor(random() * 12) * 90;
+      const road = -this.cityHalf + 52.5 + Math.floor(random() * 8) * 105;
       const lane = direction === 1 ? -3.4 : 3.4;
       const vehicle = new Vehicle({
         ...{
@@ -406,7 +408,7 @@ export class World {
         npc.vehicle.x += npc.direction * npc.speed * dt;
         if (npc.vehicle.x > this.cityHalf + 20) npc.vehicle.x = -this.cityHalf - 20;
         if (npc.vehicle.x < -this.cityHalf - 20) npc.vehicle.x = this.cityHalf + 20;
-        npc.vehicle.z = Math.round(npc.vehicle.z / 90) * 90 + npc.lane;
+        npc.vehicle.z = Math.round(npc.vehicle.z / 105) * 105 + npc.lane;
         npc.vehicle.heading = npc.direction === 1 ? Math.PI / 2 : -Math.PI / 2;
         npc.vehicle.vx = npc.direction * npc.speed;
         npc.vehicle.vz = 0;
@@ -414,7 +416,7 @@ export class World {
         npc.vehicle.z += npc.direction * npc.speed * dt;
         if (npc.vehicle.z > this.cityHalf + 20) npc.vehicle.z = -this.cityHalf - 20;
         if (npc.vehicle.z < -this.cityHalf - 20) npc.vehicle.z = this.cityHalf + 20;
-        npc.vehicle.x = Math.round(npc.vehicle.x / 90) * 90 + npc.lane;
+        npc.vehicle.x = Math.round(npc.vehicle.x / 105) * 105 + npc.lane;
         npc.vehicle.heading = npc.direction === 1 ? 0 : Math.PI;
         npc.vehicle.vx = 0;
         npc.vehicle.vz = npc.direction * npc.speed;
