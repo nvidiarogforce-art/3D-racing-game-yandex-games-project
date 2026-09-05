@@ -250,6 +250,12 @@ export class Game {
     this.input.clear();
     this.input.enabled = true;
     this.ui.show('game');
+    if (this.state === 'countdown') {
+      // Make the countdown observable immediately, even before the first animation frame.
+      // This keeps input and UI in sync on slower WebGL devices.
+      this.ui.countdown.classList.remove('hidden');
+      this.ui.countdown.textContent = '3';
+    }
     this.updateCamera(1, true);
     this.platform.setPlaying(this.state === 'running');
   }
@@ -301,11 +307,13 @@ export class Game {
   }
 
   private frame(time: number): void {
-    const dt = this.lastFrame ? clamp((time - this.lastFrame) / 1000, 0, 0.1) : 0;
+    const rawDt = this.lastFrame ? Math.max(0, (time - this.lastFrame) / 1000) : 0;
+    const dt = clamp(rawDt, 0, 0.1);
     this.lastFrame = time;
     if (this.state === 'menu') this.previewTime += dt;
     if (this.state === 'countdown') {
-      this.countdownTime -= dt;
+      // Count down in wall-clock time while keeping the physics step capped for stability.
+      this.countdownTime -= Math.min(rawDt, 0.5);
       this.ui.countdown.classList.remove('hidden');
       this.ui.countdown.textContent = String(Math.max(1, Math.ceil(this.countdownTime)));
       if (this.countdownTime <= 0) {
