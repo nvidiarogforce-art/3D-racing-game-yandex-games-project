@@ -27,8 +27,7 @@ test('garage, racing, driving, pause, reset and free drive work without browser 
   await page.screenshot({ path: 'artifacts/racing-desktop.png' });
   await page.keyboard.press('Escape');
   await expect(page.getByRole('heading', { name: 'On pause.' })).toBeVisible();
-  // Let the HUD settle, then confirm the simulation clock remains frozen.
-  await page.waitForTimeout(200);
+  // Pause must synchronize the HUD immediately, even on slow renderers.
   const pausedTime = await page.locator('#time').textContent();
   await page.waitForTimeout(500);
   await expect(page.locator('#time')).toHaveText(pausedTime!);

@@ -263,6 +263,8 @@ export class Game {
       this.input.clear();
       this.platform.setPlaying(false);
       this.audio.update(0, false);
+      // Freeze the displayed clock at the same instant as the simulation.
+      this.updateHUD();
       this.ui.show('paused');
     }
   }
