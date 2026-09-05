@@ -79,7 +79,9 @@ export class Input {
     return {
       throttle: +down('KeyW', 'ArrowUp'),
       brake: +down('KeyS', 'ArrowDown'),
-      steer: +down('KeyD', 'ArrowRight') - +down('KeyA', 'ArrowLeft'),
+      // Positive steering is the vehicle's left turn. Keep keyboard and touch controls
+      // aligned with the labels players see on screen.
+      steer: +down('KeyA', 'ArrowLeft') - +down('KeyD', 'ArrowRight'),
       handbrake: down('Space'),
     };
   }

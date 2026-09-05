@@ -91,7 +91,7 @@ export class UI {
     this.get('region').textContent = config.track.region;
     this.get('track-description').textContent =
       config.mode === 'free'
-        ? 'No clock to beat. Leave the road and explore the island.'
+        ? 'No clock to beat. Leave the circuit and explore the city.'
         : config.track.subtitle;
     (this.get('laps-select') as HTMLSelectElement).disabled = config.mode === 'free';
     this.get('track-name').textContent = config.track.name.toUpperCase();

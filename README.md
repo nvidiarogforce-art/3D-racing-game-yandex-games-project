@@ -27,10 +27,11 @@ All game code and Three.js are bundled into `dist/`. Relative asset URLs support
 - Three cars with different acceleration, top speeds, handling, and original procedural models: Sora GT, Veloce R, and Terra RS.
 - Three circuits: Coastal Loop, Canyon Run, and Pine Ridge.
 - Circuit races against three AI opponents, a countdown, 3 or 5 laps, position tracking, and results.
-- Free driving around each bounded island, including leaving the circuit. This is a compact playground, not a streaming city or an unlimited world.
+- Free driving around a large, bounded procedural city with a dense road grid, downtown tower, plaza, hundreds of buildings, roadside scenery, and 28 local traffic NPCs. The city is intentionally finite so it stays responsive on ordinary desktops and supported mobile devices.
 - Fixed-step arcade bicycle physics with braking, reverse, steering, tire slip, a handbrake, and off-road resistance.
 - Nonfatal car, barrier, tree, and rock collisions. Crashes never trigger a game-over screen.
 - AI look-ahead steering, braking for bends, simple car avoidance, and recovery if stuck.
+- Traffic NPCs follow the city grid locally and collide softly with the player; there is no external AI API or online backend.
 - Chase, wide, and hood cameras; minimap, speedometer, and lap timing.
 - Best laps saved locally per track, car, and mode; storage failures do not prevent play.
 - Keyboard and multi-pointer touch controls; responsive garage and pause menus.
@@ -92,7 +93,7 @@ src/
     RaceProgress.ts       Ordered gates, valid laps, and finish timing
   world/
     Track.ts              Closed curves, projection, road ribbons, barriers
-    World.ts              Instanced scenery, terrain, and obstacle contacts
+  World.ts              Procedural city, grid roads, buildings, traffic, and contacts
     CarModel.ts           Procedural car geometry and animated wheels
   ui/UI.ts                Setup menus, HUD, touch buttons, and minimap
   platform/Yandex.ts      Optional SDK adapter

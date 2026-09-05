@@ -342,6 +342,7 @@ export class Game {
 
   private step(dt: number): void {
     this.elapsed += dt;
+    this.world.updateTraffic(dt);
     this.cars.forEach((car, index) => {
       const point = this.world.track.nearest(car.x, car.z);
       const controls: Controls =
@@ -359,6 +360,7 @@ export class Game {
         }
       }
     });
+    this.world.collideTraffic(this.cars[0]);
     for (let i = 0; i < this.cars.length; i++)
       for (let j = i + 1; j < this.cars.length; j++) collideVehicles(this.cars[i], this.cars[j]);
     this.cars.forEach((car, index) => {
