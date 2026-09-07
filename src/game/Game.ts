@@ -250,6 +250,8 @@ export class Game {
     this.input.clear();
     this.input.enabled = true;
     this.ui.show('game');
+    // Refresh HUD after switching screens so free-drive lap state is visible immediately.
+    this.updateHUD();
     if (this.state === 'countdown') {
       // Make the countdown observable immediately, even before the first animation frame.
       // This keeps input and UI in sync on slower WebGL devices.
