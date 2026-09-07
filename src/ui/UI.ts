@@ -206,10 +206,12 @@ export class UI {
         ? 'FREE TO EXPLORE'
         : 'FIND YOUR LINE';
     this.get('time').textContent = formatTime(elapsed);
-    this.get('lap').innerHTML =
-      config.mode === 'free'
-        ? '∞'
-        : `${Math.min(lap, config.laps)} <small>/ ${config.laps}</small>`;
+    if (config.mode === 'free') {
+      // Write the free-drive marker as plain text for deterministic HUD updates.
+      this.get('lap').textContent = '∞';
+    } else {
+      this.get('lap').innerHTML = `${Math.min(lap, config.laps)} <small>/ ${config.laps}</small>`;
+    }
     this.get('position').innerHTML =
       config.mode === 'free' ? '—' : `${position} <small>/ 4</small>`;
     this.get('best').textContent = formatTime(best);
